@@ -1,7 +1,6 @@
 #include "value.hpp"
 
-#include <cmath>
-
+#include <set>
 ValuePtr operator+(ValuePtr parent1, ValuePtr parent2)
 {
     ValuePtr out = std::make_shared<Value>(parent1->_data + parent2->_data);
@@ -66,4 +65,29 @@ ValuePtr valuePow(ValuePtr parent1, double exp)
     };
 
     return out;
+}
+
+void Value::backward()
+{
+    std::vector<ValuePtr> topo;
+    std::set<Value *> visited;
+
+    std::function<void(ValuePtr)> build_topo = [&](ValuePtr v)
+    {
+        if (visited.find(v.get()) == visited.end())
+        {
+            visited.insert(v.get());
+            for (auto parent : v->_prev)
+            {
+                build_topo(parent);
+            }
+            topo.push_back(v);
+        }
+    };
+    build_topo(shared_from_this());
+    this->_grad = 1.0;
+    for (auto it = topo.rbegin(); it != topo.rend(); it++)
+    {
+        (*it)->_backward();
+    }
 }

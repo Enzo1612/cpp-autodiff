@@ -7,10 +7,12 @@
 #include <functional>
 #include <string>
 
-class Value
+class Value : public std::enable_shared_from_this<Value>
 {
 public:
     Value(double data) : _data(data), _op(""), _grad(0.0), _backward([]() {}) {}
+
+    void backward();
 
     double _data;
     std::string _op;
