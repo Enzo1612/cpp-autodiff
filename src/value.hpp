@@ -28,5 +28,6 @@ ValuePtr operator-(ValuePtr parent1, ValuePtr parent2);
 ValuePtr operator*(ValuePtr parent1, ValuePtr parent2);
 ValuePtr operator/(ValuePtr parent1, ValuePtr parent2);
 ValuePtr valuePow(ValuePtr parent, double exponent);
+ValuePtr valueTanh(ValuePtr parent);
 
 #endif

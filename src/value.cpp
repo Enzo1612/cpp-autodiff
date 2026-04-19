@@ -67,6 +67,21 @@ ValuePtr valuePow(ValuePtr parent1, double exp)
     return out;
 }
 
+ValuePtr valueTanh(ValuePtr parent)
+{
+    ValuePtr out = std::make_shared<Value>(std::tanh(parent->_data));
+
+    out->_prev = {parent};
+    out->_op = "tanh";
+
+    out->_backward = [parent, out]()
+    {
+        double local_derivative = 1 - (out->_data * out->_data); // out->_data = tanh(x)
+        parent->_grad = out->_grad * local_derivative;
+    };
+    return out;
+}
+
 void Value::backward()
 {
     std::vector<ValuePtr> topo;
