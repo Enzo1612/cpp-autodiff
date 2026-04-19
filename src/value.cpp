@@ -77,7 +77,7 @@ ValuePtr valueTanh(ValuePtr parent)
     out->_backward = [parent, out]()
     {
         double local_derivative = 1 - (out->_data * out->_data); // out->_data = tanh(x)
-        parent->_grad = out->_grad * local_derivative;
+        parent->_grad += out->_grad * local_derivative;
     };
     return out;
 }
